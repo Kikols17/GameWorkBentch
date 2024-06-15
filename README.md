@@ -1,0 +1,4 @@
+THIS IS THE unnamed GAME-ENGINE/WORKBENTCH
+
+The mission statement for this open-source project, is to create a "Game-Engine" and set of default features that allows the user to create highly optimized games, with the least bloat possible.
+The idea is that all "must have" features (renderer, sound-handler, input-handler, multiplayer-handler) are all in source code, and the creator can modify or replace them by simply editing or swapping files. For sake of efficiency, the all code must be written in C, C++, ASSEMBLY or any other language that can be compilled into flat binary. The "Game-Engine" will handle the creation of the makefile necessary for the compiling the source code into the final binary, so that the creator can choose to destribute the binary, or the full src code to be compiled by the user at run time.
