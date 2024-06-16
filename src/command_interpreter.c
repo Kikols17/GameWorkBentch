@@ -4,7 +4,10 @@
 #include "command_interpreter.h"
 #include "utils.h"
 
-int interpret_command(int argc, char *argv[], char *response) {
+extern bool verbose;
+
+
+int interpret_commands(int argc, char *argv[], char *response) {
     /* Interpret the command and return the response
      * Returns:
      *      0: Success
@@ -18,6 +21,8 @@ int interpret_command(int argc, char *argv[], char *response) {
         return 1;
     }
 
+
+    int ret = 0;
     char *command;
     //char *args[argc-2];     // the maximum number of arguments is argc - 1(name of process) -1(first command)
 
@@ -27,16 +32,20 @@ int interpret_command(int argc, char *argv[], char *response) {
             // single character, starts with "-"
             if (command[1]=='H') {
                 // Help command
-                return help_command(response);
+                ret = help_command(response);
             
             } else if (command[1]=='V') {
                 // Version command
-                return version_command(response);
+                ret = version_command(response);
             
             } else if (command[1]=='A') {
                 // Author command
-                return authors_command(response);
+                ret = authors_command(response);
             
+            } else {
+                // Invalid command
+                sprintf(response+strlen(response), "Invalid command: %s\nALL COMMANDS HALTED", command);
+                return 3;
             }
 
 
@@ -45,15 +54,15 @@ int interpret_command(int argc, char *argv[], char *response) {
             strtolower(command);        // when command is fully written, case is not important
             if (strcmp(command, "--help")==0) {
                 // Help command
-                return help_command(response);
+                ret = help_command(response);
             
             } else if ( strcmp(command, "--version")==0 ) {
                 // Version command
-                return version_command(response);
+                ret = version_command(response);
             
             } else if ( strcmp(command, "--author")==0 ) {
                 // Author command
-                return authors_command(response);
+                ret = authors_command(response);
             
             }
 
@@ -62,6 +71,11 @@ int interpret_command(int argc, char *argv[], char *response) {
             sprintf(response+strlen(response), "Invalid argument: %s\n", command);
             return 3;
         }
+
+        if (ret!=0) {
+            return ret;
+        }
+
     }
 
     return 0;

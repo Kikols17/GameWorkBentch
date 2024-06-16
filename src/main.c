@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
 
     
     // Interpret the command and print the response
-    int intr_ret = interpret_command(argc, argv, response);
+    int intr_ret = interpret_commands(argc, argv, response);
     printf("%s", response);
 
     return intr_ret;

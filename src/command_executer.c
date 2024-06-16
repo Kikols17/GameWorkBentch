@@ -3,6 +3,8 @@
 
 #include "command_executer.h"
 
+extern bool verbose;
+
 int help_command(char *response) {
                 sprintf(response+strlen(response), "HELP! List of commands:\n"
                                                    "\t-H\t--help:\t\tDisplay help\n"
@@ -19,6 +21,12 @@ int version_command(char *response) {
 int authors_command(char *response) {
     sprintf(response+strlen(response), "Authors:\n"
                                        "\tKikols\thttps://github.com/Kikols17\n");
+    return 0;
+}
+
+int verbose_command(char *response) {
+    verbose = true;
+    sprintf(response+strlen(response), "Verbose mode enabled! (\"[...]my hyper-intelligent and verbose dog\")\n");
     return 0;
 }
 
