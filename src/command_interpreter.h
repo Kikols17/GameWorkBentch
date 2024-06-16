@@ -3,7 +3,7 @@
 
 #include "command_executer.h"
 
-int interpret_command(int argc, char *argv[]);
+int interpret_command(int argc, char *argv[], char *response);
 
 
 #endif // COMMAND_INTERPRETER_H

@@ -6,6 +6,8 @@
 #include <string.h>
 
 int help_command(char *response);
+int version_command(char *response);
+int authors_command(char *response);
 
 
 #endif // COMMAND_EXECUTER_H
