@@ -104,6 +104,7 @@ int push_vectorbtx(vector_btx *v, void *element) {
 
 int pop_vectorbtx(vector_btx *v, void *element) {
     /* Pops an element from the end of the vector_btx
+     * Resizes the vector_btx if the size is less than half the capacity
      * 
      *      Arguments:
      *          -> v (vector_btx *): the vector_btx from which the element will be popped
@@ -126,6 +127,43 @@ int pop_vectorbtx(vector_btx *v, void *element) {
     void *src = v->data + (v->size-1)*(v->datatype_size);
     memcpy(element, src, v->datatype_size);
     v->size--;
+
+    if (v->size <= ((v->capacity)/2)-((v->capacity)/4)  &&  v->capacity > 1) {
+        // if the size is less than half the capacity, resize the vector_btx
+        v->data = realloc(v->data, (v->capacity/2)*(v->datatype_size));
+        if (v->data == NULL) {
+            return -2;
+        }
+        v->capacity /= 2;
+    }
+    return 0;
+}
+
+int adjust_vectorbtx(vector_btx *v) {
+    /* Forces the vector to have the minimum capacity required to store the current number of elements
+     * 
+     *      Arguments:
+     *          -> v (vector_btx *): the vector_btx to be adjusted
+     * 
+     *      Returns:
+     *          -> -2 (if the vector_btx structure is broken)
+     *          -> -1 (if the vector_btx pointer is invalid)
+     *          -> 0 (if the vector_btx was adjusted successfully)
+     */
+    if (v==NULL) {
+        return -1;
+    }
+    if (v->data==NULL) {
+        return -2;
+    }
+    while (v->size < v->capacity) {
+        v->data = realloc(v->data, (v->capacity/2)*(v->datatype_size));
+        if (v->data == NULL) {
+            return -2;
+        }
+        v->capacity /= 2;
+    }
+
     return 0;
 }
 
@@ -142,6 +180,7 @@ int get_vectorbtx(vector_btx *v, size_t index, void *element) {
      *          -> -2 (if the vector_btx structure is broken)
      *          -> -1 (if the element could not be retrieved)
      *          -> 0 (if the element was retrieved successfully)
+     *          -> 1 (if the index is out of bounds)
      */
     if (v==NULL) {
         return -1;
@@ -150,7 +189,7 @@ int get_vectorbtx(vector_btx *v, size_t index, void *element) {
         return -2;
     }
     if (index >= v->size) {
-        return -1;
+        return 1;
     }
     void *src = v->data + index*(v->datatype_size);
     memcpy(element, src, v->datatype_size);
@@ -169,6 +208,7 @@ int set_vectorbtx(vector_btx *v, size_t index, void *element) {
      *          -> -2 (if the vector_btx structure is broken)
      *          -> -1 (if the element could not be set)
      *          -> 0 (if the element was set successfully)
+     *          -> 1 (if the index is out of bounds)
      */
     if (v==NULL) {
         return -1;
@@ -177,7 +217,7 @@ int set_vectorbtx(vector_btx *v, size_t index, void *element) {
         return -2;
     }
     if (index >= v->size) {
-        return -1;
+        return 1;
     }
     void *dest = v->data + index*(v->datatype_size);
     memcpy(dest, element, v->datatype_size);
