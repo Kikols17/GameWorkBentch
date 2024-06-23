@@ -6,10 +6,10 @@
 
 // Define the vector_btx_t struct with a pointer to an array of undefined size and data type
 typedef struct vector_btx {
-    void *data;
-    size_t datatype_size;
-    size_t size;
-    size_t capacity;
+    void *data;             // Pointer to the buffer array of elements of size datatype_size
+    size_t datatype_size;   // Size of the data type in bytes (NOTE: ALTERING THIS VALUE AFTER INIT WILL CAUSE UNDEFINED BEHAVIOR)
+    size_t size;            // Number of elements currently in the vector_btx
+    size_t capacity;        // Current capacity of the vector_btx's buffer (data)
 } vector_btx;
 
 vector_btx *init_vectorbtx(size_t datatype_size);
