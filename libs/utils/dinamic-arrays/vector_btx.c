@@ -70,7 +70,7 @@ int free_vectorbtx(vector_btx *v) {
 }
 
 
-int push_vectorbtx(vector_btx *v, void *element) {
+int push_vectorbtx(vector_btx *v, const void *element) {
     /* Pushes an element to the end of the vector_btx
      * extends the vector_btx if the capacity is reached
      * 
@@ -196,7 +196,7 @@ int get_vectorbtx(vector_btx *v, size_t index, void *element) {
     return 0;
 }
 
-int set_vectorbtx(vector_btx *v, size_t index, void *element) {
+int set_vectorbtx(vector_btx *v, size_t index, const void *element) {
     /* Sets an element in the vector_btx at the specified index
      * 
      *      Arguments:
@@ -227,11 +227,11 @@ int set_vectorbtx(vector_btx *v, size_t index, void *element) {
 
 int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
     /* Sorts the elements of the vector_btx using the specified comparison function, using the qsort function
-     * 
+     *
      *      Arguments:
      *          -> v (vector_btx *): the vector_btx to be sorted
-     *          -> compare (int (*)(const void *, const void *)): the comparison function, NULL if default (memcmp)
-     * 
+     *          -> compare (int (*)(const void *, const void *)): the comparison function, NULL if default "cmp_btx" (memcmp)
+     *
      *      Returns:
      *          -> -2 (if the vector_btx structure is broken)
      *          -> -1 (if the vector_btx pointer is invalid)
@@ -245,12 +245,33 @@ int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
         // invalid data pointer, vector_btx is broken
         return -2;
     }
+
+    int (*func)(const void *, const void *);
     if (compare==NULL) {
         // if no comparison function is provided, use the default comparison function
-        compare = &memcmp;
+        func = cmp_btx;
+    } else {
+        func = compare;
     }
-    qsort(v->data, v->size, v->datatype_size, compare);
+    qsort(v->data, v->size, v->datatype_size, func);
+
     return 0;
 }
+
+int cmp_btx(const void *a, const void *b) {
+    /* Default comparison function for the sort_vectorbtx function
+     *
+     *      Arguments:
+     *          -> a (const void *): the first element to be compared
+     *          -> b (const void *): the second element to be compared
+     *
+     *      Returns:
+     *          -> -1 (if a < b)
+     *          -> 0 (if a == b)
+     *          -> 1 (if a > b)
+     */
+    return memcmp(a, b, sizeof(*a));
+}
+
 
 #endif // VECTOR_BTX_C

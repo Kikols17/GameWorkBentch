@@ -16,13 +16,14 @@ vector_btx *init_vectorbtx(size_t datatype_size);
 vector_btx *init_vectorbtx_capacity(size_t capacity, size_t datatype_size);
 int free_vectorbtx(vector_btx *v);
 
-int push_vectorbtx(vector_btx *v, void *element);
+int push_vectorbtx(vector_btx *v, const void *element);
 int pop_vectorbtx(vector_btx *v, void *element);
 int adjust_vectorbtx(vector_btx *v);
 
 int get_vectorbtx(vector_btx *v, size_t index, void *element);
-int set_vectorbtx(vector_btx *v, size_t index, void *element);
+int set_vectorbtx(vector_btx *v, size_t index, const void *element);
 
 int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *));
+int cmp_btx(const void *a, const void *b);
 
 #endif // VECTOR_BTX_H
