@@ -209,6 +209,47 @@ int adjust_vectorbtx(vector_btx *v) {
     return 0;
 }
 
+int append_vectorbtx(vector_btx *v, vector_btx *v2) {
+    /* Appends the elements of the second vector_btx to the first vector_btx
+     * Extends the first vector_btx if the capacity is reached
+     * Main
+     *
+     *      Arguments:
+     *          -> v (vector_btx *): the vector_btx to which the elements will be appended
+     *          -> v2 (vector_btx *): the vector_btx from which the elements will be appended
+     *
+     *      Returns:
+     *          -> -2 (if the vector_btx structure is broken)
+     *          -> -1 (if the vector_btx pointer is invalid)
+     *          -> 0 (if the elements were appended successfully)
+     *          -> 1 (if the vector_btx elements are not of the same data type)
+     */
+    if (v==NULL || v2==NULL) {
+        return -1;
+    }
+    if (v->data==NULL || v2->data==NULL) {
+        return -2;
+    }
+    if (v->datatype_size != v2->datatype_size) {
+        return -1;
+    }
+
+    if ( v->datatype_size!=v2->datatype_size ) {
+        return 1;
+    }
+
+    while (v->size+v2->size >= v->capacity) {
+        v->capacity *= 2;
+    }
+
+    v->data = realloc(v->data, (v->capacity)*(v->datatype_size));
+    if (v->data == NULL) {
+        return -2;
+    }
+    memcpy(v->data+v->size*(v->datatype_size), v2->data, v2->size*(v2->datatype_size));
+    v->size += v2->size;
+    return 0;
+}
 
 
 int get_vectorbtx(vector_btx *v, size_t index, void *element) {

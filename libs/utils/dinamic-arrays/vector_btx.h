@@ -22,6 +22,7 @@ int free_vectorbtx(vector_btx *v);
 int push_vectorbtx(vector_btx *v, const void *element);
 int pop_vectorbtx(vector_btx *v, void *element);
 int adjust_vectorbtx(vector_btx *v);
+int append_vectorbtx(vector_btx *v, vector_btx *v2);
 
 
 int get_vectorbtx(vector_btx *v, size_t index, void *element);
