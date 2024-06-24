@@ -7,6 +7,9 @@
 
 #include "vector_btx.h"
 
+
+
+/* Create new vectorbtx */
 vector_btx *init_vectorbtx(size_t datatype_size) {
     /* Creates a vector_btx with initial capacity=1, that can store elements of the specified size
      * This is the same as calling create_vectorbtx_capacity(1)
@@ -88,6 +91,7 @@ vector_btx *copy_vectorbtx(vector_btx *v) {
 }
 
 
+/* Free vectorbtx */
 int free_vectorbtx(vector_btx *v) {
     /* Destroys the vector_btx and frees the memory allocated for it
      * 
@@ -112,6 +116,7 @@ int free_vectorbtx(vector_btx *v) {
 
 
 
+/* Increase/Decrease size (and capacity) of the vectorbtx */
 int push_vectorbtx(vector_btx *v, const void *element) {
     /* Pushes an element to the end of the vector_btx
      * extends the vector_btx if the capacity is reached
@@ -252,6 +257,8 @@ int append_vectorbtx(vector_btx *v, vector_btx *v2) {
 }
 
 
+
+/* Get/Set values by array index on the vectorbtx */
 int get_vectorbtx(vector_btx *v, size_t index, void *element) {
     /* Gets an element from the vector_btx at the specified index
      * 
@@ -310,6 +317,7 @@ int set_vectorbtx(vector_btx *v, size_t index, const void *element) {
 
 
 
+/* Search elements in the vectorbtx */
 int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
     /* Sorts the elements of the vector_btx using the specified comparison function, using the qsort function
      *
