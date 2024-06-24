@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "vector_btx.h"
+#include "../comparisons/cmp_btx.h"
 
 
 
@@ -342,7 +343,7 @@ int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
     int (*func)(const void *, const void *);
     if (compare==NULL) {
         // if no comparison function is provided, use the default comparison function
-        func = memcmp_vectorbtx;
+        func = mem_cmpbtx;
     } else {
         func = compare;
     }
@@ -378,7 +379,7 @@ int find_vectorbtx(vector_btx *v, const void *element, int (*compare)(const void
     int (*func)(const void *, const void *);
     if (compare==NULL) {
         // if no comparison function is provided, use the default comparison function
-        func = memcmp_vectorbtx;
+        func = mem_cmpbtx;
     } else {
         func = compare;
     }
@@ -391,86 +392,6 @@ int find_vectorbtx(vector_btx *v, const void *element, int (*compare)(const void
     }
 
     return -3;
-}
-
-
-int memcmp_vectorbtx(const void *a, const void *b) {
-    /* Default comparison function for the sort_vectorbtx function
-     * Compares the elements using the memcmp function, not suitable for float elements
-     *
-     *      Arguments:
-     *          -> a (const void *): the first element to be compared
-     *          -> b (const void *): the second element to be compared
-     *
-     *      Returns:
-     *          -> -2 (if a or b is NULL)
-     *          -> -1 (if a < b)
-     *          -> 0 (if a == b)
-     *          -> 1 (if a > b)
-     */
-    if (a==NULL || b==NULL) {
-        return -2;
-    }
-
-    return memcmp(a, b, sizeof(*a));
-}
-
-int intcmp_vectorbtx(const void *a, const void *b) {
-    /* Comparison function for the sort_vectorbtx function for int elements
-     * Compares the elements using the int values
-     *
-     *      Arguments:
-     *          -> a (const void *): the first element to be compared
-     *          -> b (const void *): the second element to be compared
-     *
-     *      Returns:
-     *          -> -2 (if a or b is NULL)
-     *          -> -1 (if a < b)
-     *          -> 0 (if a == b)
-     *          -> 1 (if a > b)
-     */
-    if (a==NULL || b==NULL) {
-        return -2;
-    }
-
-    int ia = *(int*)a;
-    int ib = *(int*)b;
-    if (ia < ib) {
-        return -1;
-    } else if (ia > ib) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-int floatcmp_vectorbtx(const void *a, const void *b) {
-    /* Comparison function for the sort_vectorbtx function for float elements
-     * Compares the elements using the float values
-     *
-     *      Arguments:
-     *          -> a (const void *): the first element to be compared
-     *          -> b (const void *): the second element to be compared
-     *
-     *      Returns:
-     *          -> -2 (if a or b is NULL)
-     *          -> -1 (if a < b)
-     *          -> 0 (if a == b)
-     *          -> 1 (if a > b)
-     */
-    if (a==NULL || b==NULL) {
-        return -2;
-    }
-
-    float fa = *(float*)a;
-    float fb = *(float*)b;
-    if (fa < fb) {
-        return -1;
-    } else if (fa > fb) {
-        return 1;
-    } else {
-        return 0;
-    }
 }
 
 

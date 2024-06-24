@@ -39,10 +39,6 @@ int set_vectorbtx(vector_btx *v, size_t index, const void *element);
 int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *));
 int find_vectorbtx(vector_btx *v, const void *element, int (*compare)(const void *, const void *));
 
-int memcmp_vectorbtx(const void *a, const void *b);
-int intcmp_vectorbtx(const void *a, const void *b);
-int floatcmp_vectorbtx(const void *a, const void *b);
-
 
 
 #endif // VECTOR_BTX_H
