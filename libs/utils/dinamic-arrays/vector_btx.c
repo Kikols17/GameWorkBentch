@@ -249,7 +249,7 @@ int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
     int (*func)(const void *, const void *);
     if (compare==NULL) {
         // if no comparison function is provided, use the default comparison function
-        func = cmp_btx;
+        func = memcmp_vectorbtx;
     } else {
         func = compare;
     }
@@ -258,8 +258,53 @@ int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
     return 0;
 }
 
-int cmp_btx(const void *a, const void *b) {
+int find_vectorbtx(vector_btx *v, const void *element, int (*compare)(const void *, const void *)) {
+    /* Finds the first instance of the element in the vector_btx using the specified comparison function
+     * Does not return pointer to the element, only the index, since vector_btx is not memory safe, and the point of it's functions is to abstract the memory management
+     *
+     *      Arguments:
+     *          -> v (vector_btx *): the vector_btx in which the element will be searched
+     *          -> element (const void *): the element to be searched
+     *          -> compare (int (*)(const void *, const void *)): the comparison function, NULL if default "cmp_btx" (memcmp)
+     *
+     *      Returns:
+     *          -> -3 (if the element was not found)
+     *          -> -2 (if the vector_btx structure is broken)
+     *          -> -1 (if the vector_btx pointer is invalid)
+     *          -> [index] (if the element was found at index)
+     */
+    if (v==NULL) {
+        // invalid vector_btx pointer
+        return -1;
+    }
+    if (v->data==NULL) {
+        // invalid data pointer, vector_btx is broken
+        return -2;
+    }
+
+    int (*func)(const void *, const void *);
+    if (compare==NULL) {
+        // if no comparison function is provided, use the default comparison function
+        func = memcmp_vectorbtx;
+    } else {
+        func = compare;
+    }
+
+    for (size_t i=0; i<v->size; i++) {
+        void *src = v->data + i*(v->datatype_size);
+        if (func(src, element)==0) {
+            return i;
+        }
+    }
+
+    return -3;
+}
+
+
+
+int memcmp_vectorbtx(const void *a, const void *b) {
     /* Default comparison function for the sort_vectorbtx function
+     * Compares the elements using the memcmp function, not suitable for float elements
      *
      *      Arguments:
      *          -> a (const void *): the first element to be compared
@@ -271,6 +316,30 @@ int cmp_btx(const void *a, const void *b) {
      *          -> 1 (if a > b)
      */
     return memcmp(a, b, sizeof(*a));
+}
+
+int floatcmp_vectorbtx(const void *a, const void *b) {
+    /* Comparison function for the sort_vectorbtx function for float elements
+     * Compares the elements using the float values
+     *
+     *      Arguments:
+     *          -> a (const void *): the first element to be compared
+     *          -> b (const void *): the second element to be compared
+     *
+     *      Returns:
+     *          -> -1 (if a < b)
+     *          -> 0 (if a == b)
+     *          -> 1 (if a > b)
+     */
+    float fa = *(float*)a;
+    float fb = *(float*)b;
+    if (fa < fb) {
+        return -1;
+    } else if (fa > fb) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 
