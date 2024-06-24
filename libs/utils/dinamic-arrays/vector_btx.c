@@ -47,6 +47,47 @@ vector_btx *init_vectorbtx_capacity(size_t capacity, size_t datatype_size) {
     return v;
 }
 
+vector_btx *copy_vectorbtx(vector_btx *v) {
+    /* Creates a copy of the vector_btx
+     *
+     *      Arguments:
+     *          -> v (vector_btx *): the vector_btx to be copied
+     *
+     *      Returns:
+     *          -> NULL (if the vector_btx could not be copied)
+     *          -> [valid pointer] (if the vector_btx was copied successfully)
+     */
+    if (v==NULL) {
+        return NULL;
+    }
+    if (v->data==NULL) {
+        return NULL;
+    }
+
+    vector_btx *copy = (vector_btx*)malloc(sizeof(vector_btx));
+    if (copy == NULL) {
+        return NULL;
+    }
+    copy->data = malloc( v->capacity*(v->datatype_size) );
+    if (copy->data == NULL) {
+        free(copy);
+        return NULL;
+    }
+
+    if (memcpy(copy->data, v->data, v->size*(v->datatype_size)) == NULL) {
+        // if the copy failed, free the memory and return NULL
+        free(copy->data);
+        free(copy);
+        return NULL;
+    }
+    copy->datatype_size = v->datatype_size;
+    copy->size = v->size;
+    copy->capacity = v->capacity;
+
+    return copy;
+}
+
+
 int free_vectorbtx(vector_btx *v) {
     /* Destroys the vector_btx and frees the memory allocated for it
      * 
@@ -313,11 +354,45 @@ int memcmp_vectorbtx(const void *a, const void *b) {
      *          -> b (const void *): the second element to be compared
      *
      *      Returns:
+     *          -> -2 (if a or b is NULL)
      *          -> -1 (if a < b)
      *          -> 0 (if a == b)
      *          -> 1 (if a > b)
      */
+    if (a==NULL || b==NULL) {
+        return -2;
+    }
+
     return memcmp(a, b, sizeof(*a));
+}
+
+int intcmp_vectorbtx(const void *a, const void *b) {
+    /* Comparison function for the sort_vectorbtx function for int elements
+     * Compares the elements using the int values
+     *
+     *      Arguments:
+     *          -> a (const void *): the first element to be compared
+     *          -> b (const void *): the second element to be compared
+     *
+     *      Returns:
+     *          -> -2 (if a or b is NULL)
+     *          -> -1 (if a < b)
+     *          -> 0 (if a == b)
+     *          -> 1 (if a > b)
+     */
+    if (a==NULL || b==NULL) {
+        return -2;
+    }
+
+    int ia = *(int*)a;
+    int ib = *(int*)b;
+    if (ia < ib) {
+        return -1;
+    } else if (ia > ib) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 int floatcmp_vectorbtx(const void *a, const void *b) {
@@ -329,10 +404,15 @@ int floatcmp_vectorbtx(const void *a, const void *b) {
      *          -> b (const void *): the second element to be compared
      *
      *      Returns:
+     *          -> -2 (if a or b is NULL)
      *          -> -1 (if a < b)
      *          -> 0 (if a == b)
      *          -> 1 (if a > b)
      */
+    if (a==NULL || b==NULL) {
+        return -2;
+    }
+
     float fa = *(float*)a;
     float fb = *(float*)b;
     if (fa < fb) {
@@ -343,7 +423,6 @@ int floatcmp_vectorbtx(const void *a, const void *b) {
         return 0;
     }
 }
-
 
 
 #endif // VECTOR_BTX_C
