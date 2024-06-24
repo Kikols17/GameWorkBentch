@@ -70,6 +70,7 @@ int free_vectorbtx(vector_btx *v) {
 }
 
 
+
 int push_vectorbtx(vector_btx *v, const void *element) {
     /* Pushes an element to the end of the vector_btx
      * extends the vector_btx if the capacity is reached
@@ -168,6 +169,7 @@ int adjust_vectorbtx(vector_btx *v) {
 }
 
 
+
 int get_vectorbtx(vector_btx *v, size_t index, void *element) {
     /* Gets an element from the vector_btx at the specified index
      * 
@@ -223,6 +225,7 @@ int set_vectorbtx(vector_btx *v, size_t index, const void *element) {
     memcpy(dest, element, v->datatype_size);
     return 0;
 }
+
 
 
 int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
@@ -301,7 +304,6 @@ int find_vectorbtx(vector_btx *v, const void *element, int (*compare)(const void
 }
 
 
-
 int memcmp_vectorbtx(const void *a, const void *b) {
     /* Default comparison function for the sort_vectorbtx function
      * Compares the elements using the memcmp function, not suitable for float elements
@@ -341,6 +343,7 @@ int floatcmp_vectorbtx(const void *a, const void *b) {
         return 0;
     }
 }
+
 
 
 #endif // VECTOR_BTX_C
