@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #include "vector_btx.h"
-#include "../comparisons/cmp_btx.h"
+#include "../../comparisons/cmp_btx.h"
 
 
 
@@ -324,7 +324,7 @@ int sort_vectorbtx(vector_btx *v, int (*compare)(const void *, const void *)) {
      *
      *      Arguments:
      *          -> v (vector_btx *): the vector_btx to be sorted
-     *          -> compare (int (*)(const void *, const void *)): the comparison function, NULL if default "cmp_btx" (memcmp)
+     *          -> compare (int (*)(const void *, const void *)): the comparison function, NULL if default "mem_cmpbtx" (memcmp)
      *
      *      Returns:
      *          -> -2 (if the vector_btx structure is broken)
